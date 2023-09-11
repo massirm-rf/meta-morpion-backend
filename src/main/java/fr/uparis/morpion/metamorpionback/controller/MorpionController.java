@@ -1,5 +1,6 @@
 package fr.uparis.morpion.metamorpionback.controller;
 
+import fr.uparis.morpion.metamorpionback.model.Grid;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,9 +19,8 @@ public class MorpionController {
      * @return the grid filled with the player's input in the body
      */
     @PostMapping(value = "/fill")
-    public Object fillGrid(@RequestBody Object bodyInput) {
+    public void fillGrid(@RequestBody Object bodyInput) {
         //TODO
-        return null;
     }
 
     /**
@@ -36,7 +36,7 @@ public class MorpionController {
      * @return the actual grid of the game
      */
     @GetMapping(value = "/actual-grid")
-    public Object getActualGrid() {
+    public Grid getActualGrid() {
         //TODO
         return null;
     }
@@ -46,7 +46,7 @@ public class MorpionController {
      * @return the next grid of the game
      */
     @GetMapping("/next-grid")
-    public Object getNextGrid() {
+    public Grid getNextGrid() {
         //TODO
         return null;
     }
