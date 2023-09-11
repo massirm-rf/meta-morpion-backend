@@ -1,6 +1,8 @@
 package fr.uparis.morpion.metamorpionback.controller;
 
+import fr.uparis.morpion.metamorpionback.model.BoxEnum;
 import fr.uparis.morpion.metamorpionback.model.Grid;
+import fr.uparis.morpion.metamorpionback.model.GridDTO;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,13 +16,26 @@ public class MorpionController {
 
     }
 
+
+    /**
+     * initialize the grid of the game
+     *
+     */
+    @PostMapping(value = "/init")
+     public Grid initGrid(BoxEnum startingPlayer) {
+        LOGGER.info("init game...");
+        //TODO
+        return null;
+     }
+
     /**
      * @param bodyInput
      * @return the grid filled with the player's input in the body
      */
     @PostMapping(value = "/fill")
-    public void fillGrid(@RequestBody Object bodyInput) {
+    public Grid fillGrid(@RequestBody GridDTO bodyInput) {
         //TODO
+        return null;
     }
 
     /**
