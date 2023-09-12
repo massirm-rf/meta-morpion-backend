@@ -29,11 +29,11 @@ public class MorpionController {
         template.convertAndSend(gameService.initGame(starterPlayer, starter));
     }
 
-    @PostMapping(value = "/join")
-    public Game joinGame(@RequestBody Player starterPlayer) {
-        LOGGER.info("join game...");
-        return gameService.joinGame(starterPlayer);
-    }
+//    @PostMapping(value = "/join")
+//    public Game joinGame(@RequestBody Player starterPlayer) {
+//        LOGGER.info("join game...");
+//        return gameService.joinGame(starterPlayer);
+//    }
 
     /**
      * @param bodyInput
