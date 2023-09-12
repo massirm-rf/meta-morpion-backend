@@ -14,10 +14,22 @@ import static fr.uparis.morpion.metamorpionback.utils.Constants.WIDTH;
 public class Grid {
 
     private ChildGrid childGrids[][];
-    private boolean completed;
 
     public Grid() {
         childGrids = new ChildGrid[WIDTH][HEIGHT];
     }
 
+
+    public boolean isCompleted() {
+
+        for (int i = 0; i<HEIGHT; i++) {
+            for (int j=0; j<WIDTH; j++) {
+                if (childGrids[i][j].getWinner() == BoxEnum.NONE) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
 }
