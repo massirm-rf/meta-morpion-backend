@@ -1,9 +1,11 @@
 package fr.uparis.morpion.metamorpionback.services;
 
 import fr.uparis.morpion.metamorpionback.model.*;
+import lombok.Getter;
 import org.springframework.stereotype.Service;
 
 @Service
+@Getter
 public class GameService {
     private Game game;
 
