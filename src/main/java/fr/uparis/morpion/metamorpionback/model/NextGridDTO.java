@@ -10,8 +10,10 @@ import lombok.*;
 @Setter
 public class NextGridDTO {
 
-    private int row;
-    private int column;
+    private Integer row;
+    private Integer column;
+    private Player player;
+    private boolean isFinished;
 
 
 }
