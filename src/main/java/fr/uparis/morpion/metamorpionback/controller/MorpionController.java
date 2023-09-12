@@ -38,10 +38,10 @@ public class MorpionController {
      * @param bodyInput
      * @return the grid filled with the player's input in the body
      */
-    @PostMapping(value = "/fill")
-    public void fillGrid(@RequestBody GridDTO bodyInput) {
+    @PostMapping(value = "/play")
+    public void play(@RequestBody GridDTO bodyInput) {
         //TODO
-        template.convertAndSend(gameService.fillGrid(bodyInput));
+        template.convertAndSend("/play", gameService.fillGrid(bodyInput));
     }
 
     /**
