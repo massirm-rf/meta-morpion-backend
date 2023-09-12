@@ -56,6 +56,12 @@ public class GameService {
             return nextGridInfos;
         }
 
+        if(game.getGrid().isCompleted()) {
+            nextGridInfos.setFinished(true);
+            nextGridInfos.setPlayer(currentPlayer);
+            return nextGridInfos;
+        }
+
         return nextGridInfos;
     }
 

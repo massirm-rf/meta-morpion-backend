@@ -15,7 +15,6 @@ import static fr.uparis.morpion.metamorpionback.utils.Constants.WIDTH;
 public class ChildGrid {
     private BoxEnum[][] boxes;
     private BoxEnum completer;
-    private boolean isCompleted;
 
     public ChildGrid() {
         boxes = new BoxEnum[WIDTH][HEIGHT];
