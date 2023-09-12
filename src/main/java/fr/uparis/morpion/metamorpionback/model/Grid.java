@@ -25,7 +25,7 @@ public class Grid {
         }
     }
 
-    public BoxEnum getWinner() {
+    public BoxEnum calculateWinner() {
         BoxEnum childGridWinner;
         for (int i = 0; i < HEIGHT; i++) {
             childGridWinner = checkLine(i);
