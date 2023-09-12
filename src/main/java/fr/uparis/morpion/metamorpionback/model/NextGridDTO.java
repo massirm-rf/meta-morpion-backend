@@ -13,7 +13,7 @@ public class NextGridDTO {
     private Integer row;
     private Integer column;
     private Player player;
-    private boolean isFinished;
+    private boolean finished;
     private BoxEnum lastChildFinished;
 
 
