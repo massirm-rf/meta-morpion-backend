@@ -18,6 +18,11 @@ public class Grid {
 
     public Grid() {
         childGrids = new ChildGrid[WIDTH][HEIGHT];
+        for (int i = 0; i < HEIGHT; i++) {
+            for (int j = 0; j < WIDTH; j++) {
+                childGrids[i][j] = new ChildGrid();
+            }
+        }
     }
 
     public BoxEnum getWinner() {
