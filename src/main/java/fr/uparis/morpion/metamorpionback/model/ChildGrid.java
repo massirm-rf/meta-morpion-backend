@@ -71,7 +71,7 @@ public class ChildGrid {
     private BoxEnum checkColumn(int lineNumber) {
         BoxEnum firstColumnBox = boxes[0][lineNumber];
         for (int i = 1; i < HEIGHT; i++) {
-            if (!boxes[lineNumber][i].equals(firstColumnBox)) return BoxEnum.none;
+            if (!boxes[i][lineNumber].equals(firstColumnBox)) return BoxEnum.none;
         }
         return firstColumnBox;
     }
