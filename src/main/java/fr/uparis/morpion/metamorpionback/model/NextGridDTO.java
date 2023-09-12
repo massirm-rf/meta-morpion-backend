@@ -14,6 +14,7 @@ public class NextGridDTO {
     private Integer column;
     private Player player;
     private boolean isFinished;
+    private BoxEnum lastChildFinished;
 
 
 }
