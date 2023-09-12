@@ -15,13 +15,16 @@ public class GameService {
         Player player2 = Player.builder().playerName("player2").gameValue(player2GameValue).build();
         this.game = Game.builder().player1(starterPlayer).player2(player2).grid(new Grid()).build();
 
+        game.setCurrentPlayer((starter) ? starterPlayer : player2);
+
+
         return game;
 
     }
 
     /*public Game joinGame(Player joinerPlayer) {
 
-        if (joinerPlayer.getGameValue().compareTo(currentPlayer.getGameValue()) == 0) {
+        if (joinerPlayer.getGameValue().compareTo(game.getCurrentPlayer().getGameValue()) == 0) {
             throw new IllegalArgumentException("Game value already taken");
         }
 
@@ -39,14 +42,13 @@ public class GameService {
         BoxEnum value = gridInfos.getValue();
         game.getGrid().getChildGrids()[row][column].setBox(childRow, childColumn, value);
 
-        Player currentPlayer = null;
-        Player nextPlayer = null;
+        Player nextPlayer;
         if( game.getPlayer1().getGameValue().compareTo(value) == 0 ) {
-            nextPlayer = game.getPlayer1();
-            currentPlayer = game.getPlayer2();
-        } else {
             nextPlayer = game.getPlayer2();
-            currentPlayer = game.getPlayer1();
+            game.setCurrentPlayer(game.getPlayer1());
+        } else {
+            nextPlayer = game.getPlayer1();
+            game.setCurrentPlayer(game.getPlayer2());
         }
         NextGridDTO nextGridInfos = NextGridDTO.builder().row(childRow).column(childColumn).player(nextPlayer).build();
 
@@ -58,7 +60,7 @@ public class GameService {
 
         if(game.getGrid().isCompleted()) {
             nextGridInfos.setFinished(true);
-            nextGridInfos.setPlayer(currentPlayer);
+            nextGridInfos.setPlayer(game.getCurrentPlayer());
             return nextGridInfos;
         }
 

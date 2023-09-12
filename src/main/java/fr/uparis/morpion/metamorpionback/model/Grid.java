@@ -24,7 +24,7 @@ public class Grid {
 
         for (int i = 0; i<HEIGHT; i++) {
             for (int j=0; j<WIDTH; j++) {
-                if (childGrids[i][j].getWinner() == BoxEnum.NONE) {
+                if (childGrids[i][j].getWinner() == BoxEnum.none) {
                     return false;
                 }
             }
