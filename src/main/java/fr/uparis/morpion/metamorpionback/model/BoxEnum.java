@@ -1,7 +1,7 @@
 package fr.uparis.morpion.metamorpionback.model;
 
 public enum BoxEnum {
-    X,
-    O,
-    NONE
+    x_value,
+    o_value,
+    none
 }

@@ -11,7 +11,7 @@ public class GameService {
 
     public Game initGame(Player starterPlayer, boolean starter) {
 
-        BoxEnum player2GameValue = (starterPlayer.getGameValue().compareTo(BoxEnum.X) == 0) ? BoxEnum.O : BoxEnum.X;
+        BoxEnum player2GameValue = (starterPlayer.getGameValue().compareTo(BoxEnum.x_value) == 0) ? BoxEnum.o_value : BoxEnum.x_value;
         Player player2 = Player.builder().playerName("player2").gameValue(player2GameValue).build();
         this.game = Game.builder().player1(starterPlayer).player2(player2).grid(new Grid()).build();
 

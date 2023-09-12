@@ -20,7 +20,7 @@ public class ChildGrid {
     public ChildGrid() {
         boxes = new BoxEnum[WIDTH][HEIGHT];
         initBoxes();
-        completer = BoxEnum.NONE;
+        completer = BoxEnum.none;
     }
 
     public void setBox(int row, int column, BoxEnum box) {
@@ -30,7 +30,7 @@ public class ChildGrid {
     private void initBoxes() {
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
-                boxes[i][j] = BoxEnum.NONE;
+                boxes[i][j] = BoxEnum.none;
             }
         }
     }
@@ -38,7 +38,7 @@ public class ChildGrid {
     public boolean isFull() {
         for (BoxEnum[] boxLine : boxes) {
             for (BoxEnum box : boxLine) {
-                if (box == BoxEnum.NONE) {
+                if (box == BoxEnum.none) {
                     return false;
                 }
             }
@@ -50,11 +50,11 @@ public class ChildGrid {
         BoxEnum childGridWinner;
         for (int i = 0; i < HEIGHT; i++) {
             childGridWinner = checkLine(i);
-            if (childGridWinner != BoxEnum.NONE) {
+            if (childGridWinner != BoxEnum.none) {
                 return childGridWinner;
             }
             childGridWinner = checkColumn(i);
-            if (checkColumn(i) != BoxEnum.NONE) {
+            if (checkColumn(i) != BoxEnum.none) {
                 return checkColumn(i);
             }
         }
@@ -64,7 +64,7 @@ public class ChildGrid {
     private BoxEnum checkLine(int lineNumber) {
         BoxEnum firstLineBox = boxes[lineNumber][0];
         for (int i = 1; i < WIDTH; i++) {
-            if (!boxes[lineNumber][i].equals(firstLineBox)) return BoxEnum.NONE;
+            if (!boxes[lineNumber][i].equals(firstLineBox)) return BoxEnum.none;
         }
         return firstLineBox;
     }
@@ -72,7 +72,7 @@ public class ChildGrid {
     private BoxEnum checkColumn(int lineNumber) {
         BoxEnum firstColumnBox = boxes[0][lineNumber];
         for (int i = 1; i < HEIGHT; i++) {
-            if (!boxes[lineNumber][i].equals(firstColumnBox)) return BoxEnum.NONE;
+            if (!boxes[lineNumber][i].equals(firstColumnBox)) return BoxEnum.none;
         }
         return firstColumnBox;
     }
@@ -82,6 +82,6 @@ public class ChildGrid {
         if ((boxes[0][0] == centralBox && centralBox == boxes[2][2]) || (boxes[0][2] == centralBox && centralBox == boxes[2][0])) {
             return centralBox;
         }
-        return BoxEnum.NONE;
+        return BoxEnum.none;
     }
 }

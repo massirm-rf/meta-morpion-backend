@@ -20,13 +20,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/swns")
                 .enableSimpleBroker(
-                        "/notifications",
-                        "/notifications-count",
-                        "/role",
-                        "/role/update-account",
-                        "/import-data-progress",
-                        "/sample-data-progress",
-                        "/email-sync"
+                        "/init-game"
                 );
     }
 

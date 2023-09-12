@@ -1,10 +1,11 @@
 package fr.uparis.morpion.metamorpionback.controller;
 
-import fr.uparis.morpion.metamorpionback.model.*;
+import fr.uparis.morpion.metamorpionback.model.Grid;
+import fr.uparis.morpion.metamorpionback.model.GridDTO;
+import fr.uparis.morpion.metamorpionback.model.Player;
 import fr.uparis.morpion.metamorpionback.services.GameService;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,19 +15,16 @@ import org.springframework.web.bind.annotation.*;
 public class MorpionController {
 
     private static final Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(MorpionController.class);
-
-    private GameService gameService;
     private final SimpMessagingTemplate template;
-
+    private GameService gameService;
 
     /**
      * initialize the grid of the game
-     *
      */
     @PostMapping(value = "/init")
     public void initGame(@RequestParam boolean starter, @RequestBody Player starterPlayer) {
         LOGGER.info("init game...");
-        template.convertAndSend(gameService.initGame(starterPlayer, starter));
+        template.convertAndSend("/init-game", gameService.initGame(starterPlayer, starter));
     }
 
 //    @PostMapping(value = "/join")
@@ -71,8 +69,6 @@ public class MorpionController {
         //TODO
         return null;
     }
-
-
 
 
 }
