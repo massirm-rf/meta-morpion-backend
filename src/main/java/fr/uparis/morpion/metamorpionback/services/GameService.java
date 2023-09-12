@@ -54,7 +54,7 @@ public class GameService {
 
         nextGridInfos.setLastChildFinished(game.getGrid().getChildGrids()[row][column].getWinner());
 
-        if(game.getGrid().getChildGrids()[childRow][childColumn].isFull() || nextGridInfos.getLastChildFinished() != BoxEnum.none){
+        if(game.getGrid().getChildGrids()[childRow][childColumn].isFull()){
             nextGridInfos.setRow(null);
             nextGridInfos.setColumn(null);
             return nextGridInfos;
