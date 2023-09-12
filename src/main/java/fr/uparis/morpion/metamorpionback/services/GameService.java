@@ -29,10 +29,17 @@ public class GameService {
 
     }
 
-    public Game fillGrid(GridDTO gridInfos) {
-        //TODO
-//        game.getGrid().getChildGrids()[0][0];
-        return game;
+    public NextGridDTO fillGrid(GridDTO gridInfos) {
+        int row = gridInfos.getRow();
+        int column = gridInfos.getColumn();
+        int childRow = gridInfos.getChildRow();
+        int childColumn = gridInfos.getChildColumn();
+        game.getGrid().getChildGrids()[row][column].setBox(childRow, childColumn, gridInfos.getValue());
+        if(game.getGrid().getChildGrids()[childRow][childColumn].isFull()){
+            return null;
+        }
+        NextGridDTO nextGridInfos = NextGridDTO.builder().row(childRow).column(childColumn).build();
+        return nextGridInfos;
     }
 
 
