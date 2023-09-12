@@ -51,7 +51,7 @@ public class Grid {
     private BoxEnum checkColumn(int lineNumber) {
         BoxEnum firstColumnBox = childGrids[0][lineNumber].getWinner();
         for (int i = 1; i < HEIGHT; i++) {
-            if (!childGrids[lineNumber][i].getWinner().equals(firstColumnBox)) return BoxEnum.none;
+            if (!childGrids[i][lineNumber].getWinner().equals(firstColumnBox)) return BoxEnum.none;
         }
         return firstColumnBox;
     }
