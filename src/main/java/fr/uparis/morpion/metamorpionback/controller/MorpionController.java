@@ -5,6 +5,7 @@ import fr.uparis.morpion.metamorpionback.services.GameService;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,6 +16,7 @@ public class MorpionController {
     private static final Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(MorpionController.class);
 
     private GameService gameService;
+    private final SimpMessagingTemplate template;
 
 
     /**
@@ -22,25 +24,25 @@ public class MorpionController {
      *
      */
     @PostMapping(value = "/init")
-     public Game initGame(@RequestParam boolean starter, @RequestBody Player starterPlayer) {
+    public void initGame(@RequestParam boolean starter, @RequestBody Player starterPlayer) {
         LOGGER.info("init game...");
-        return gameService.initGame(starterPlayer, starter);
-     }
+        template.convertAndSend(gameService.initGame(starterPlayer, starter));
+    }
 
-     @PostMapping(value = "/join")
-     public Game joinGame(@RequestBody Player starterPlayer) {
+    @PostMapping(value = "/join")
+    public Game joinGame(@RequestBody Player starterPlayer) {
         LOGGER.info("join game...");
         return gameService.joinGame(starterPlayer);
-     }
+    }
 
     /**
      * @param bodyInput
      * @return the grid filled with the player's input in the body
      */
     @PostMapping(value = "/fill")
-    public NextGridDTO fillGrid(@RequestBody GridDTO bodyInput) {
+    public void fillGrid(@RequestBody GridDTO bodyInput) {
         //TODO
-        return gameService.fillGrid(bodyInput);
+        template.convertAndSend(gameService.fillGrid(bodyInput));
     }
 
     /**
@@ -56,9 +58,8 @@ public class MorpionController {
      * @return the actual grid of the game
      */
     @GetMapping(value = "/actual-grid")
-    public Grid getActualGrid() {
-        //TODO
-        return null;
+    public void getActualGrid() {
+        template.convertAndSend(gameService.getGame().getGrid());
     }
 
 
