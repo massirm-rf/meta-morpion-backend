@@ -58,7 +58,7 @@ public class GameService {
             return nextGridInfos;
         }
 
-        if(game.getGrid().isCompleted()) {
+        if (game.getGrid().getWinner() != BoxEnum.none) {
             nextGridInfos.setFinished(true);
             nextGridInfos.setPlayer(game.getCurrentPlayer());
             return nextGridInfos;

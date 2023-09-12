@@ -14,12 +14,12 @@ import static fr.uparis.morpion.metamorpionback.utils.Constants.WIDTH;
 @Setter
 public class ChildGrid {
     private BoxEnum[][] boxes;
-    private BoxEnum completer;
+    private BoxEnum winnerValue;
 
     public ChildGrid() {
         boxes = new BoxEnum[WIDTH][HEIGHT];
         initBoxes();
-        completer = BoxEnum.none;
+        winnerValue = BoxEnum.none;
     }
 
     public void setBox(int row, int column, BoxEnum box) {
