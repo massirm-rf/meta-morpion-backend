@@ -19,7 +19,7 @@ public class GameService {
 
     public Game joinGame(Player joinerPlayer) {
 
-        if(joinerPlayer.getGameValue().compareTo(currentPlayer.getGameValue()) == 0) {
+        if (joinerPlayer.getGameValue().compareTo(currentPlayer.getGameValue()) == 0) {
             throw new IllegalArgumentException("Game value already taken");
         }
 
@@ -31,12 +31,9 @@ public class GameService {
 
     public Game fillGrid(GridDTO gridInfos) {
         //TODO
-        //game.getGrid().getChildGrids()[0][0].;
+//        game.getGrid().getChildGrids()[0][0];
         return game;
     }
-
-
-
 
 
 }
