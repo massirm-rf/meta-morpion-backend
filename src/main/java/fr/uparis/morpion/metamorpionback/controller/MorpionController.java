@@ -1,20 +1,20 @@
 package fr.uparis.morpion.metamorpionback.controller;
 
-import fr.uparis.morpion.metamorpionback.model.BoxEnum;
-import fr.uparis.morpion.metamorpionback.model.Grid;
-import fr.uparis.morpion.metamorpionback.model.GridDTO;
+import fr.uparis.morpion.metamorpionback.model.*;
+import fr.uparis.morpion.metamorpionback.services.GameService;
+import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping(value = "/morpion")
 public class MorpionController {
 
     private static final Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(MorpionController.class);
 
-    public MorpionController() {
-
-    }
+    private GameService gameService;
 
 
     /**
@@ -22,10 +22,15 @@ public class MorpionController {
      *
      */
     @PostMapping(value = "/init")
-     public Grid initGrid(BoxEnum startingPlayer) {
+     public Game initGame(@RequestParam boolean starter, @RequestBody Player starterPlayer) {
         LOGGER.info("init game...");
-        //TODO
-        return null;
+        return gameService.initGame(starterPlayer, starter);
+     }
+
+     @PostMapping(value = "/join")
+     public Game joinGame(@RequestBody Player starterPlayer) {
+        LOGGER.info("join game...");
+        return gameService.joinGame(starterPlayer);
      }
 
     /**
@@ -33,9 +38,9 @@ public class MorpionController {
      * @return the grid filled with the player's input in the body
      */
     @PostMapping(value = "/fill")
-    public Grid fillGrid(@RequestBody GridDTO bodyInput) {
+    public Game fillGrid(@RequestBody GridDTO bodyInput) {
         //TODO
-        return null;
+        return gameService.fillGrid(bodyInput);
     }
 
     /**

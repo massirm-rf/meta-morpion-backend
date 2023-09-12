@@ -13,23 +13,23 @@ import static fr.uparis.morpion.metamorpionback.utils.Constants.WIDTH;
 @Builder
 public class Grid {
 
-    private final childGrid childGrids[][];
+    private ChildGrid childGrids[][];
     private boolean completed;
 
     public Grid() {
-        childGrids = new childGrid[WIDTH][HEIGHT];
+        childGrids = new ChildGrid[WIDTH][HEIGHT];
     }
 
     @Data
     @AllArgsConstructor
     @Getter
     @Setter
-    class childGrid {
-        private final BoxEnum[][] boxes;
+    class ChildGrid {
+        private BoxEnum[][] boxes;
         private BoxEnum completer;
         private boolean isCompleted;
 
-        public childGrid() {
+        public ChildGrid() {
             boxes = new BoxEnum[WIDTH][HEIGHT];
             initBoxes();
             completer = BoxEnum.NONE;
