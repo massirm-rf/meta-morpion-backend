@@ -11,6 +11,13 @@ public class Game {
     private Player player1;
     private Player player2;
     private boolean isFinished;
-    private final Grid grid;
+    private Grid grid;
+
+
+
+    public boolean isReady() {
+        return player1 != null && player2 != null;
+    }
+
 
 }
