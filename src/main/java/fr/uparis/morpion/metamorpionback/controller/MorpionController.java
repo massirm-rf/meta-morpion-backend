@@ -1,5 +1,6 @@
 package fr.uparis.morpion.metamorpionback.controller;
 
+import fr.uparis.morpion.metamorpionback.model.Game;
 import fr.uparis.morpion.metamorpionback.model.Grid;
 import fr.uparis.morpion.metamorpionback.model.GridDTO;
 import fr.uparis.morpion.metamorpionback.model.Player;
@@ -27,11 +28,11 @@ public class MorpionController {
         template.convertAndSend("/init-game", gameService.initGame(starterPlayer, starter));
     }
 
-//    @PostMapping(value = "/join")
-//    public Game joinGame(@RequestBody Player starterPlayer) {
-//        LOGGER.info("join game...");
-//        return gameService.joinGame(starterPlayer);
-//    }
+    /*@PostMapping(value = "/join")
+    public Game joinGame(@RequestBody Player starterPlayer) {
+        LOGGER.info("join game...");
+        return gameService.joinGame(starterPlayer);
+    }*/
 
     /**
      * @param bodyInput

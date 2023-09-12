@@ -10,6 +10,7 @@ import lombok.*;
 public class Game {
     private Player player1;
     private Player player2;
+    private Player currentPlayer;
     private boolean isFinished;
     private Grid grid;
 
