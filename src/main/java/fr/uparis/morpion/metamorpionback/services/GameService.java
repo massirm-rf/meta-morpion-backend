@@ -6,18 +6,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class GameService {
     private Game game;
-    private Player currentPlayer;
 
     public Game initGame(Player starterPlayer, boolean starter) {
 
-        this.game = Game.builder().player1(starterPlayer).grid(new Grid()).build();
-        currentPlayer = (starter) ? game.getPlayer1() : game.getPlayer2();
+        BoxEnum player2GameValue = (starterPlayer.getGameValue().compareTo(BoxEnum.X) == 0) ? BoxEnum.O : BoxEnum.X;
+        Player player2 = Player.builder().playerName("player2").gameValue(player2GameValue).build();
+        this.game = Game.builder().player1(starterPlayer).player2(player2).grid(new Grid()).build();
 
         return game;
 
     }
 
-    public Game joinGame(Player joinerPlayer) {
+    /*public Game joinGame(Player joinerPlayer) {
 
         if (joinerPlayer.getGameValue().compareTo(currentPlayer.getGameValue()) == 0) {
             throw new IllegalArgumentException("Game value already taken");
@@ -27,12 +27,34 @@ public class GameService {
 
         return game;
 
-    }
+    }*/
 
-    public Game fillGrid(GridDTO gridInfos) {
-        //TODO
-//        game.getGrid().getChildGrids()[0][0];
-        return game;
+    public NextGridDTO fillGrid(GridDTO gridInfos) {
+        int row = gridInfos.getRow();
+        int column = gridInfos.getColumn();
+        int childRow = gridInfos.getChildRow();
+        int childColumn = gridInfos.getChildColumn();
+        BoxEnum value = gridInfos.getValue();
+        game.getGrid().getChildGrids()[row][column].setBox(childRow, childColumn, value);
+
+        Player currentPlayer = null;
+        Player nextPlayer = null;
+        if( game.getPlayer1().getGameValue().compareTo(value) == 0 ) {
+            nextPlayer = game.getPlayer1();
+            currentPlayer = game.getPlayer2();
+        } else {
+            nextPlayer = game.getPlayer2();
+            currentPlayer = game.getPlayer1();
+        }
+        NextGridDTO nextGridInfos = NextGridDTO.builder().row(childRow).column(childColumn).player(nextPlayer).build();
+
+        if(game.getGrid().getChildGrids()[childRow][childColumn].isFull()){
+            nextGridInfos.setRow(null);
+            nextGridInfos.setColumn(null);
+            return nextGridInfos;
+        }
+
+        return nextGridInfos;
     }
 
 

@@ -23,12 +23,27 @@ public class ChildGrid {
         completer = BoxEnum.NONE;
     }
 
+    public void setBox(int row, int column, BoxEnum box) {
+        boxes[row][column] = box;
+    }
+
     private void initBoxes() {
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
                 boxes[i][j] = BoxEnum.NONE;
             }
         }
+    }
+
+    public boolean isFull() {
+        for (BoxEnum[] boxLine : boxes) {
+            for (BoxEnum box : boxLine) {
+                if (box == BoxEnum.NONE) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public BoxEnum getWinner() {

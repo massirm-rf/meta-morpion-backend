@@ -1,13 +1,11 @@
 package fr.uparis.morpion.metamorpionback.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class Player {
     private final String playerName;
     private final BoxEnum gameValue;

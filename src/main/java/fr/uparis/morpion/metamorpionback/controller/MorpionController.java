@@ -38,7 +38,7 @@ public class MorpionController {
      * @return the grid filled with the player's input in the body
      */
     @PostMapping(value = "/fill")
-    public Game fillGrid(@RequestBody GridDTO bodyInput) {
+    public NextGridDTO fillGrid(@RequestBody GridDTO bodyInput) {
         //TODO
         return gameService.fillGrid(bodyInput);
     }
