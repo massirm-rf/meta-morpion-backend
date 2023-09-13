@@ -72,5 +72,10 @@ public class GameService {
         return nextGridInfos;
     }
 
+    public Boolean quitGame(){
+        this.game = null;
+        return Boolean.TRUE;
+    }
+
 
 }
