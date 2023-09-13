@@ -59,10 +59,10 @@ public class MorpionController {
     public ResponseEntity<NextGridDTO> play(HttpServletRequest httpServletRequest, @io.swagger.v3.oas.annotations.parameters.RequestBody(
             description = """
                     Données du coup à jouer où :
-                    \nrow : Le numéro de ligne de la grande grille (0 à 8 du haut vers le bas)
-                    \ncolumn : Le numéro de la colonne de la grande grille (0 à 8 de gauche à droite)
-                    \nchildRow : Le numéro de ligne de la petite grille (0 à 8 du haut vers le bas)
-                    \nchildColumn : Le numéro de la colonne de la petite grille (0 à 8 de gauche à droite)
+                    \nrow : Le numéro de ligne de la grande grille (0 à 2 du haut vers le bas)
+                    \ncolumn : Le numéro de la colonne de la grande grille (0 à 2 de gauche à droite)
+                    \nchildRow : Le numéro de ligne de la petite grille (0 à 2 du haut vers le bas)
+                    \nchildColumn : Le numéro de la colonne de la petite grille (0 à 2 de gauche à droite)
                     \nvalue : La valeur du coup à jouer (x_value, o_value ou none)""",
             required = true,
             content = @Content(schema = @Schema(implementation = GridDTO.class)))
