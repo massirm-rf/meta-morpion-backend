@@ -38,8 +38,9 @@ public class MorpionController {
             content = @Content(schema = @Schema(implementation = Player.class)))
     @RequestBody Player starterPlayer) {
         LOGGER.info("init game...");
-        template.convertAndSend("/init-game", gameService.initGame(starterPlayer, starter));
-        return null;
+        Game firstGridGame = gameService.initGame(starterPlayer, starter);
+        template.convertAndSend("/init-game", firstGridGame);
+        return ResponseEntity.ok(firstGridGame);
     }
 
     /**
@@ -62,18 +63,20 @@ public class MorpionController {
             required = true,
             content = @Content(schema = @Schema(implementation = GridDTO.class)))
                                             @RequestBody GridDTO bodyInput) {
-        template.convertAndSend("/play", gameService.fillGrid(bodyInput));
-        return null;
+        NextGridDTO nextGrid = gameService.fillGrid(bodyInput);
+        template.convertAndSend("/play", nextGrid);
+        return ResponseEntity.ok(nextGrid);
     }
 
     @Operation(summary = "Quitter la partie", description = "Quitter la partie en cours")
-    @PostMapping(value = "/quit")
-    @ApiResponse(responseCode = "201", description = "La partie est terminée ",content = @Content(mediaType = "text/plain"))
+    @DeleteMapping(value = "/quit")
+    @ApiResponse(responseCode = "201", description = "La partie est terminée ", content = @Content(mediaType = "text/plain"))
     @ApiResponse(responseCode = "400", description = "Requête invalide", content = @Content(mediaType = "text/plain"))
     @ApiResponse(responseCode = "500", description = "Erreur interne du serveur", content = @Content(mediaType = "text/plain"))
     public ResponseEntity<Boolean> quit() {
-//        template.convertAndSend("/quit",);
-        return null;
+        Boolean quitGameValue = gameService.quitGame();
+        template.convertAndSend("/quit", quitGameValue);
+        return ResponseEntity.ok(quitGameValue);
     }
 
 
