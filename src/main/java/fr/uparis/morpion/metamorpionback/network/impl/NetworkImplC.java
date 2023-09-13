@@ -51,4 +51,9 @@ public class NetworkImplC implements Network {
         HttpEntity<String> request = new HttpEntity<>(null, headers);
         return template.postForObject(url, request, Object.class);
     }
+
+    @Override
+    public Object quit(Map<String, Object> params, Object body) {
+        return null;
+    }
 }

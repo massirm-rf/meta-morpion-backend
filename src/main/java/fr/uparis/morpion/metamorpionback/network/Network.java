@@ -9,5 +9,7 @@ public interface Network {
 
     Object play(Map<String, Object> params, Object body);
 
+    Object quit(Map<String, Object> params, Object body);
+
 
 }

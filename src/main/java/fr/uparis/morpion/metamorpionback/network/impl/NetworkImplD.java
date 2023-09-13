@@ -43,4 +43,9 @@ public class NetworkImplD implements Network {
 //        return template.postForObject(url, request, Object.class);
         return null;
     }
+
+    @Override
+    public Object quit(Map<String, Object> params, Object body) {
+        return null;
+    }
 }

@@ -97,7 +97,12 @@ public class GameService {
         return nextGridInfos;
     }
 
-    public Boolean quitGame() {
+    public Boolean quitGame(boolean isFrontend) {
+        if (game.getIp() != null && isFrontend) {
+            Map<String, Object> params = new HashMap<>();
+            params.put("ip", game.getIp());
+            network.quit(params, null);
+        }
         this.game = null;
         return Boolean.TRUE;
     }

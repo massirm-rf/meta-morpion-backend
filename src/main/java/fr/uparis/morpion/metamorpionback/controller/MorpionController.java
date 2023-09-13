@@ -80,8 +80,9 @@ public class MorpionController {
     @ApiResponse(responseCode = "201", description = "La partie est terminée ", content = @Content(mediaType = "text/plain"))
     @ApiResponse(responseCode = "400", description = "Requête invalide", content = @Content(mediaType = "text/plain"))
     @ApiResponse(responseCode = "500", description = "Erreur interne du serveur", content = @Content(mediaType = "text/plain"))
-    public ResponseEntity<Boolean> quit() {
-        Boolean quitGameValue = gameService.quitGame();
+    public ResponseEntity<Boolean> quit(HttpServletRequest httpServletRequest) {
+        boolean isFrontend = httpServletRequest.getHeader("host") != null && httpServletRequest.getHeader("host").startsWith("localhost");
+        Boolean quitGameValue = gameService.quitGame(isFrontend);
         template.convertAndSend("/quit", quitGameValue);
         return ResponseEntity.ok(quitGameValue);
     }

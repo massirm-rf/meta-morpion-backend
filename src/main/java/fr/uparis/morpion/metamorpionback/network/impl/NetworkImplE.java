@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Collections;
 import java.util.Map;
 
 @Service
@@ -60,6 +61,14 @@ public class NetworkImplE implements Network {
 
 
 
+    }
+
+    @Override
+    public Object quit(Map<String, Object> params, Object body) {
+        RestTemplate template = new RestTemplate();
+        String url = (String) params.get("ip");
+        template.delete(url + "/morpion/quit", Collections.emptyMap());
+        return null;
     }
 
 }

@@ -47,6 +47,11 @@ public class NetworkImpA implements Network {
         return template.postForObject(url, request, Object.class);
     }
 
+    @Override
+    public Object quit(Map<String, Object> params, Object body) {
+        return null;
+    }
+
 
     private String getPlayerValue(BoxEnum playerValue) {
         switch (playerValue) {
