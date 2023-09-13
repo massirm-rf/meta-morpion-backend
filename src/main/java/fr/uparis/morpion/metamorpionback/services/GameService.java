@@ -22,25 +22,17 @@ public class GameService {
 
     }
 
-    /*public Game joinGame(Player joinerPlayer) {
-
-        if (joinerPlayer.getGameValue().compareTo(game.getCurrentPlayer().getGameValue()) == 0) {
-            throw new IllegalArgumentException("Game value already taken");
-        }
-
-        game.setPlayer2(joinerPlayer);
-
-        return game;
-
-    }*/
-
     public NextGridDTO fillGrid(GridDTO gridInfos) {
-        int row = gridInfos.getRow();
-        int column = gridInfos.getColumn();
-        int childRow = gridInfos.getChildRow();
-        int childColumn = gridInfos.getChildColumn();
+        Integer row = gridInfos.getRow();
+        Integer column = gridInfos.getColumn();
+        Integer childRow = gridInfos.getChildRow();
+        Integer childColumn = gridInfos.getChildColumn();
         BoxEnum value = gridInfos.getValue();
-        game.getGrid().getChildGrids()[row][column].setBox(childRow, childColumn, value);
+
+
+        if (value == BoxEnum.none ) {
+            throw new IllegalArgumentException("value must be x or o");
+        }
 
         Player nextPlayer;
         if( game.getPlayer1().getGameValue().compareTo(value) == 0 ) {
@@ -50,10 +42,18 @@ public class GameService {
             nextPlayer = game.getPlayer1();
             game.setCurrentPlayer(game.getPlayer2());
         }
+
         NextGridDTO nextGridInfos = NextGridDTO.builder().row(childRow).column(childColumn).player(nextPlayer).build();
         BoxEnum childWinnerValue = game.getGrid().getChildGrids()[row][column].getWinner();
+
+        if ( game.getGrid().getChildGrids()[row][column].isFull() || childWinnerValue != BoxEnum.none) {
+            throw new IllegalArgumentException(" You must play a not completed grid !");
+        }
+
+        game.getGrid().getChildGrids()[row][column].setBox(childRow, childColumn, value);
         nextGridInfos.setLastChildFinished(childWinnerValue);
         game.getGrid().getChildGrids()[row][column].setWinnerValue(childWinnerValue);
+
 
         if(game.getGrid().getChildGrids()[childRow][childColumn].isFull() || game.getGrid().getChildGrids()[childRow][childColumn].getWinnerValue() != BoxEnum.none){
             nextGridInfos.setRow(null);

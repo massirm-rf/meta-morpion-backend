@@ -10,10 +10,10 @@ import lombok.*;
 @Setter
 public class GridDTO {
 
-    private int row;
-    private int column;
-    private int childRow;
-    private int childColumn;
+    private Integer row;
+    private Integer column;
+    private Integer childRow;
+    private Integer childColumn;
     private BoxEnum value;
 
 

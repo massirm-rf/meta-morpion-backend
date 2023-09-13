@@ -30,12 +30,6 @@ public class MorpionController {
         template.convertAndSend("/init-game", gameService.initGame(starterPlayer, starter));
     }
 
-    /*@PostMapping(value = "/join")
-    public Game joinGame(@RequestBody Player starterPlayer) {
-        LOGGER.info("join game...");
-        return gameService.joinGame(starterPlayer);
-    }*/
-
     /**
      * @param bodyInput
      * @return the grid filled with the player's input in the body
