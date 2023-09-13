@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
-@Profile(value = "E")
+@Profile(value = "e")
 public class NetworkImplE implements Network {
 
 

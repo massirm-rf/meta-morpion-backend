@@ -61,6 +61,74 @@
 
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<id>a</id>
+			<properties>
+				<activatedProperties>a</activatedProperties>
+			</properties>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+				<property>
+					<name>env</name>
+					<value>a</value>
+				</property>
+			</activation>
+		</profile>
+		<profile>
+			<id>b</id>
+			<properties>
+				<activatedProperties>b</activatedProperties>
+			</properties>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+				<property>
+					<name>env</name>
+					<value>b</value>
+				</property>
+			</activation>
+		</profile>
+		<profile>
+			<id>c</id>
+			<properties>
+				<activatedProperties>c</activatedProperties>
+			</properties>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+				<property>
+					<name>env</name>
+					<value>c</value>
+				</property>
+			</activation>
+		</profile>
+		<profile>
+			<id>d</id>
+			<properties>
+				<activatedProperties>d</activatedProperties>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+				<property>
+					<name>env</name>
+					<value>d</value>
+				</property>
+			</activation>
+		</profile>
+		<profile>
+			<id>e</id>
+			<properties>
+				<activatedProperties>e</activatedProperties>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+				<property>
+					<name>env</name>
+					<value>e</value>
+				</property>
+			</activation>
+		</profile>
+	</profiles>
+
 	<build>
 		<plugins>
 			<plugin>
