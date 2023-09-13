@@ -16,9 +16,9 @@ import java.util.UUID;
 @Service
 @Profile({"c"})
 public class NetworkImplC implements Network {
-    @Value("room-code")
+    @Value("${room-code}")
     private String roomCode;
-    @Value("player-uuid")
+    @Value("${player-uuid}")
     private String playerUUIO;
 
     @Override

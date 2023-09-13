@@ -3,6 +3,7 @@ package fr.uparis.morpion.metamorpionback.network.impl;
 import fr.uparis.morpion.metamorpionback.model.GridDTO;
 import fr.uparis.morpion.metamorpionback.model.Player;
 import fr.uparis.morpion.metamorpionback.network.Network;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +18,8 @@ import java.util.Map;
 @Profile({"e"})
 public class NetworkImplE implements Network {
 
+    @Value("${my-ip}")
+    private String myIp;
 
     @Override
     public Object initGame(Map<String, Object> params, Object body) {
@@ -27,7 +30,7 @@ public class NetworkImplE implements Network {
         boolean starter = (boolean) params.get("starter");
         Player starterPlayer = (Player) body;
 
-        url = String.format("%s?starter=%s&starterPlayer=%s", url, starter, starterPlayer);
+        url = String.format("%s/morpion/init?starter=%s&starterPlayer=%s&ip=%s", url, starter, starterPlayer, myIp);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setOrigin((String) params.get("ip"));
@@ -53,7 +56,7 @@ public class NetworkImplE implements Network {
 
         HttpEntity<GridDTO> request = new HttpEntity<>(gridDTO, headers);
 
-        return template.postForObject(url, request, Object.class);
+        return template.postForObject(url + "/morpion/play", request, Object.class);
 
 
 
