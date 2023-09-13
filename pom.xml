@@ -107,7 +107,7 @@
 				<activatedProperties>d</activatedProperties>
 			</properties>
 			<activation>
-				<activeByDefault>true</activeByDefault>
+				<activeByDefault>false</activeByDefault>
 				<property>
 					<name>env</name>
 					<value>d</value>
