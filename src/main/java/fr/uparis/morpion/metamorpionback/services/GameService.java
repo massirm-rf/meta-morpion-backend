@@ -26,12 +26,14 @@ public class GameService {
         this.game = Game.builder().player1(starterPlayer).player2(player2).grid(new Grid()).build();
         game.setCurrentPlayer((starter) ? starterPlayer : player2);
 
-        if (ip != null && isFrontend) {
+        if (ip != null) {
             game.setIp(ip);
-            Map<String, Object> params = new HashMap<>();
-            params.put("ip", ip);
-            params.put("starter", starter);
-            network.initGame(params, starterPlayer);
+            if(isFrontend) {
+                Map<String, Object> params = new HashMap<>();
+                params.put("ip", ip);
+                params.put("starter", starter);
+                network.initGame(params, starterPlayer);
+            }
         }
 
         return game;
