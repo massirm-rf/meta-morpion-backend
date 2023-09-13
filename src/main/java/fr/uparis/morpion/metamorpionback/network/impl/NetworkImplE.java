@@ -33,7 +33,7 @@ public class NetworkImplE implements Network {
         url = String.format("%s/morpion/init?starter=%s&starterPlayer=%s&ip=%s", url, starter, starterPlayer, myIp);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setOrigin((String) params.get("ip"));
+        headers.setOrigin(myIp);
 
 
         HttpEntity<Player> request = new HttpEntity<>(starterPlayer, headers);
@@ -50,7 +50,7 @@ public class NetworkImplE implements Network {
         String url = (String) params.get("ip");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setOrigin(url);
+        headers.setOrigin(myIp);
 
         GridDTO gridDTO = (GridDTO) body;
 
