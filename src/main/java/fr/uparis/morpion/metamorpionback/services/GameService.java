@@ -25,7 +25,7 @@ public class GameService {
         this.game = Game.builder().player1(starterPlayer).player2(player2).grid(new Grid()).build();
         game.setCurrentPlayer((starter) ? starterPlayer : player2);
 
-        if( ip != null ) {
+        if( ip != null && !ip.equals("http://localhost:8080")) {
             game.setIp(ip);
             Map<String, Object> params = new HashMap<>();
             params.put("ip", ip);
