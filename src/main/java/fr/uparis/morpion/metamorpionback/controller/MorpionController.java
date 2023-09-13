@@ -58,7 +58,7 @@ public class MorpionController {
     @ApiResponse(responseCode = "200", description = "Coup joué avec succès")
     @ApiResponse(responseCode = "400", description = "Requête invalide", content = @Content(mediaType = "text/plain"))
     @ApiResponse(responseCode = "500", description = "Erreur interne du serveur", content = @Content(mediaType = "text/plain"))
-    public ResponseEntity<NextGridDTO> play(@io.swagger.v3.oas.annotations.parameters.RequestBody(
+    public ResponseEntity<NextGridDTO> play(HttpServletRequest httpServletRequest, @io.swagger.v3.oas.annotations.parameters.RequestBody(
             description = """
                     Données du coup à jouer où :
                     \nrow : Le numéro de ligne de la grande grille (0 à 8 du haut vers le bas)
@@ -69,7 +69,10 @@ public class MorpionController {
             required = true,
             content = @Content(schema = @Schema(implementation = GridDTO.class)))
                                             @RequestBody GridDTO bodyInput) {
-        NextGridDTO nextGrid = gameService.fillGrid(bodyInput);
+
+        String ip = httpServletRequest.getHeader("host");
+
+        NextGridDTO nextGrid = gameService.fillGrid(ip, bodyInput);
         template.convertAndSend("/play", nextGrid);
         return ResponseEntity.ok(nextGrid);
     }

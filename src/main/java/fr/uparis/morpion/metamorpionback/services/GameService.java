@@ -36,7 +36,7 @@ public class GameService {
         return game;
     }
 
-    public NextGridDTO fillGrid(GridDTO gridInfos) {
+    public NextGridDTO fillGrid(String ip, GridDTO gridInfos) {
         Integer row = gridInfos.getRow();
         Integer column = gridInfos.getColumn();
         Integer childRow = gridInfos.getChildRow();
@@ -85,7 +85,7 @@ public class GameService {
             return nextGridInfos;
         }
 
-        if( game.getIp() != null ) {
+        if( game.getIp() != null && !ip.equals("http://localhost:8080")) {
             Map<String, Object> params = new HashMap<>();
             params.put("ip", game.getIp());
             network.play(params, gridInfos);
