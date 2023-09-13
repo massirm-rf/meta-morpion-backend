@@ -30,10 +30,13 @@ public class NetworkImplD implements Network {
 
     @Override
     public Object play(Map<String, Object> params, Object body) {
-//        String url = (String) params.get("ip");
-//        GridDTO gridDto = (GridDTO) body;
-//        int bigX =
-//        url = String.format("%s?positionX=%s&positionY=%s&positionx=%s&positiony=%s&player=%s", url, gridDto.getRow(), gridDto.getColumn(), gridDto.getChildRow(), gridDto.getChildColumn(), getPlayerValue(gridDto.getValue()));
+        String url = (String) params.get("ip");
+        GridDTO gridDto = (GridDTO) body;
+        int bigX = gridDto.getColumn();
+        int bigY = gridDto.getRow();
+        int littleX = gridDto.getChildColumn();
+        int littleY = gridDto.getChildRow();
+//        url = String.format("%s?bigX=%s&bigY=%s&littleX=%s&littleY=%s&player=%s", url, bigX,bigY, littleX, littleY, getPlayerValue(gridDto.getValue()));
 //        RestTemplate template = new RestTemplate();
 //        HttpHeaders headers = new HttpHeaders();
 //        headers.setContentType(MediaType.APPLICATION_JSON);
