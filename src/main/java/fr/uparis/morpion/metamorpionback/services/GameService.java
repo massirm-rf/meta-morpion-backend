@@ -60,7 +60,9 @@ public class GameService {
             game.setCurrentPlayer(game.getPlayer2());
         }
 
-        NextGridDTO nextGridInfos = NextGridDTO.builder().row(childRow).column(childColumn).player(nextPlayer).build();
+        NextGridDTO nextGridInfos = NextGridDTO.builder().playedRow(row).playedColumn(column)
+                .playedChildRow(childRow).playedChildColumn(childColumn)
+                .nextRow(childRow).nextColumn(childColumn).player(nextPlayer).build();
 
         BoxEnum childWinnerValue = game.getGrid().getChildGrids()[row][column].getWinner();
 
@@ -75,8 +77,8 @@ public class GameService {
 
 
         if (game.getGrid().getChildGrids()[childRow][childColumn].isFull() || game.getGrid().getChildGrids()[childRow][childColumn].getWinnerValue() != BoxEnum.none) {
-            nextGridInfos.setRow(null);
-            nextGridInfos.setColumn(null);
+            nextGridInfos.setNextRow(null);
+            nextGridInfos.setNextColumn(null);
             return nextGridInfos;
         }
 
