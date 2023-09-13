@@ -1,15 +1,19 @@
 package fr.uparis.morpion.metamorpionback.controller;
 
-import fr.uparis.morpion.metamorpionback.model.Game;
-import fr.uparis.morpion.metamorpionback.model.Grid;
-import fr.uparis.morpion.metamorpionback.model.GridDTO;
-import fr.uparis.morpion.metamorpionback.model.Player;
+import fr.uparis.morpion.metamorpionback.model.*;
 import fr.uparis.morpion.metamorpionback.services.GameService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.Logger;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
+
+import javax.swing.text.html.parser.Entity;
 
 @RestController
 @AllArgsConstructor
@@ -25,49 +29,50 @@ public class MorpionController {
      */
     @Operation(summary = "Création de partie", description = "Créer une nouvelle partie")
     @PostMapping(value = "/init")
-    public void initGame(@RequestParam boolean starter, @RequestBody Player starterPlayer) {
+    @ApiResponse(responseCode = "201", description = "Partie créée avec succès", content = @Content(schema = @Schema(implementation = Game.class)))
+    @ApiResponse(responseCode = "400", description = "Requête invalide", content = @Content(mediaType = "text/plain"))
+    @ApiResponse(responseCode = "500", description = "Erreur interne du serveur", content = @Content(mediaType = "text/plain"))
+    public ResponseEntity<Game> initGame(@Parameter(description = "Indiquer si le joueur veut jouer en premier", required = true, example = "true") @RequestParam boolean starter, @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Données du joueur démarreur de partie",
+            required = true,
+            content = @Content(schema = @Schema(implementation = Player.class)))
+    @RequestBody Player starterPlayer) {
         LOGGER.info("init game...");
         template.convertAndSend("/init-game", gameService.initGame(starterPlayer, starter));
+        return null;
     }
 
     /**
      * @param bodyInput
      * @return the grid filled with the player's input in the body
      */
-    @Operation(summary = "Jouer un coup", description = "Jouer un coup dans la partie en envoyant les coordonées de la case")
+    @Operation(summary = "Jouer un coup", description = "Jouer un coup dans la partie en envoyant les coordonnées de la case")
     @PostMapping(value = "/play")
-    public void play(@RequestBody GridDTO bodyInput) {
-        //TODO
+    @ApiResponse(responseCode = "200", description = "Coup joué avec succès")
+    @ApiResponse(responseCode = "400", description = "Requête invalide", content = @Content(mediaType = "text/plain"))
+    @ApiResponse(responseCode = "500", description = "Erreur interne du serveur", content = @Content(mediaType = "text/plain"))
+    public ResponseEntity<NextGridDTO> play(@io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = """
+                    Données du coup à jouer où :
+                    \nrow : Le numéro de ligne de la grande grille (0 à 8 du haut vers le bas)
+                    \ncolumn : Le numéro de la colonne de la grande grille (0 à 8 de gauche à droite)
+                    \nchildRow : Le numéro de ligne de la petite grille (0 à 8 du haut vers le bas)
+                    \nchildColumn : Le numéro de la colonne de la petite grille (0 à 8 de gauche à droite)
+                    \nvalue : La valeur du coup à jouer (x_value, o_value ou none)""",
+            required = true,
+            content = @Content(schema = @Schema(implementation = GridDTO.class)))
+                                            @RequestBody GridDTO bodyInput) {
         template.convertAndSend("/play", gameService.fillGrid(bodyInput));
+        return null;
     }
 
-    /**
-     * @return the player who has to play (X or O)
-     */
-    @Operation(summary = "Dernier joueur", description = "Récupérer le dernier joueur qui a joué")
-    @GetMapping(value = "/player-round")
-    public String getPlayerRound() {
-        //TODO
-        return "x";
-    }
-
-    /**
-     * @return the actual grid of the game
-     */
-    @Operation(summary = "Etat de la grille", description = "Récupérer l'état actuel de la grille")
-    @GetMapping(value = "/actual-grid")
-    public void getActualGrid() {
-        template.convertAndSend(gameService.getGame().getGrid());
-    }
-
-
-    /**
-     * @return the next grid of the game
-     */
-    @Operation(summary = "Prochaine zone", description = "Récupérer la prochaine zone du jeu où il faut jouer")
-    @GetMapping("/next-grid")
-    public Grid getNextGrid() {
-        //TODO
+    @Operation(summary = "Quitter la partie", description = "Quitter la partie en cours")
+    @PostMapping(value = "/quit")
+    @ApiResponse(responseCode = "201", description = "La partie est terminée ",content = @Content(mediaType = "text/plain"))
+    @ApiResponse(responseCode = "400", description = "Requête invalide", content = @Content(mediaType = "text/plain"))
+    @ApiResponse(responseCode = "500", description = "Erreur interne du serveur", content = @Content(mediaType = "text/plain"))
+    public ResponseEntity<Boolean> quit() {
+//        template.convertAndSend("/quit",);
         return null;
     }
 
