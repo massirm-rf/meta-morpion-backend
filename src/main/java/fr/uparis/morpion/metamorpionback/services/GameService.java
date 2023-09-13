@@ -44,13 +44,15 @@ public class GameService {
         }
 
         NextGridDTO nextGridInfos = NextGridDTO.builder().row(childRow).column(childColumn).player(nextPlayer).build();
+
+        game.getGrid().getChildGrids()[row][column].setBox(childRow, childColumn, value);
+
         BoxEnum childWinnerValue = game.getGrid().getChildGrids()[row][column].getWinner();
 
         if ( game.getGrid().getChildGrids()[row][column].isFull() || childWinnerValue != BoxEnum.none) {
             throw new IllegalArgumentException(" You must play a not completed grid !");
         }
 
-        game.getGrid().getChildGrids()[row][column].setBox(childRow, childColumn, value);
         nextGridInfos.setLastChildFinished(childWinnerValue);
         game.getGrid().getChildGrids()[row][column].setWinnerValue(childWinnerValue);
 
