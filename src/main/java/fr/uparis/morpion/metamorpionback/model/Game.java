@@ -14,6 +14,8 @@ public class Game {
     private boolean isFinished;
     private Grid grid;
 
+    private String ip;
+
 
 
     public boolean isReady() {
