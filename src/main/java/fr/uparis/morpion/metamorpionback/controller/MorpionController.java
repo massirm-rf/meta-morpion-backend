@@ -40,11 +40,9 @@ public class MorpionController {
     @RequestBody Player starterPlayer) {
         LOGGER.info("init game...");
 
-        if( httpServletRequest.getHeader("host").startsWith("localhost")) {
-            ip = "http://localhost:8080";
-        }
+        boolean isFrontend = httpServletRequest.getHeader("host") != null && httpServletRequest.getHeader("host").startsWith("localhost");
 
-        Game firstGridGame = gameService.initGame(ip,starterPlayer, starter);
+        Game firstGridGame = gameService.initGame(ip,starterPlayer, starter, isFrontend);
         template.convertAndSend("/init-game", firstGridGame);
         return ResponseEntity.ok(firstGridGame);
     }
@@ -70,9 +68,9 @@ public class MorpionController {
             content = @Content(schema = @Schema(implementation = GridDTO.class)))
                                             @RequestBody GridDTO bodyInput) {
 
-        String ip = httpServletRequest.getHeader("host");
+        boolean isFrontend = httpServletRequest.getHeader("host") != null && httpServletRequest.getHeader("host").startsWith("localhost");
 
-        NextGridDTO nextGrid = gameService.fillGrid(ip, bodyInput);
+        NextGridDTO nextGrid = gameService.fillGrid(bodyInput, isFrontend);
         template.convertAndSend("/play", nextGrid);
         return ResponseEntity.ok(nextGrid);
     }

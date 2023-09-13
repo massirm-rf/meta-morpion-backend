@@ -11,21 +11,22 @@ import java.util.Map;
 @Service
 @Getter
 public class GameService {
-    private Game game;
     private final Network network;
+    private Game game;
 
     public GameService(Network network) {
         this.network = network;
     }
 
-    public Game initGame(String ip, Player starterPlayer, boolean starter) {
+    public Game initGame(String ip, Player starterPlayer, boolean starter, boolean isFrontend) {
 
-        BoxEnum player2GameValue = (starterPlayer.getGameValue().compareTo(BoxEnum.x_value) == 0) ? BoxEnum.o_value : BoxEnum.x_value;
+        BoxEnum player2GameValue = (starterPlayer.getGameValue().compareTo(BoxEnum.x_value) == 0) ? BoxEnum.o_value :
+                BoxEnum.x_value;
         Player player2 = Player.builder().playerName("player2").gameValue(player2GameValue).build();
         this.game = Game.builder().player1(starterPlayer).player2(player2).grid(new Grid()).build();
         game.setCurrentPlayer((starter) ? starterPlayer : player2);
 
-        if( ip != null && !ip.equals("http://localhost:8080")) {
+        if (ip != null && !isFrontend) {
             game.setIp(ip);
             Map<String, Object> params = new HashMap<>();
             params.put("ip", ip);
@@ -36,7 +37,7 @@ public class GameService {
         return game;
     }
 
-    public NextGridDTO fillGrid(String ip, GridDTO gridInfos) {
+    public NextGridDTO fillGrid(GridDTO gridInfos, boolean isFrontend) {
         Integer row = gridInfos.getRow();
         Integer column = gridInfos.getColumn();
         Integer childRow = gridInfos.getChildRow();
@@ -85,7 +86,7 @@ public class GameService {
             return nextGridInfos;
         }
 
-        if( game.getIp() != null && !ip.equals("http://localhost:8080")) {
+        if (game.getIp() != null && !isFrontend) {
             Map<String, Object> params = new HashMap<>();
             params.put("ip", game.getIp());
             network.play(params, gridInfos);
