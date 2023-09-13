@@ -6,12 +6,15 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 import java.util.UUID;
 
-@Profile("c")
+@Service
+@Profile({"c"})
 public class NetworkImplC implements Network {
     @Value("room-code")
     private String roomCode;

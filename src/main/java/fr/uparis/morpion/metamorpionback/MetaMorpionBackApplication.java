@@ -2,8 +2,12 @@ package fr.uparis.morpion.metamorpionback;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
+@EnableConfigurationProperties
+@ComponentScan(basePackages = {"fr.uparis.morpion.metamorpionback.*"})
 public class MetaMorpionBackApplication {
 
 	public static void main(String[] args) {

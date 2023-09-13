@@ -12,7 +12,11 @@ import java.util.Map;
 @Getter
 public class GameService {
     private Game game;
-    private Network network;
+    private final Network network;
+
+    public GameService(Network network) {
+        this.network = network;
+    }
 
     public Game initGame(String ip, Player starterPlayer, boolean starter) {
 
