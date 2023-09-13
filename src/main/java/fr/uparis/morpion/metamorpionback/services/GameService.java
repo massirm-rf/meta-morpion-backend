@@ -79,7 +79,6 @@ public class GameService {
         if (game.getGrid().getChildGrids()[childRow][childColumn].isFull() || game.getGrid().getChildGrids()[childRow][childColumn].getWinnerValue() != BoxEnum.none) {
             nextGridInfos.setNextRow(null);
             nextGridInfos.setNextColumn(null);
-            return nextGridInfos;
         }
 
         BoxEnum winnerValue = game.getGrid().calculateWinner();
@@ -87,7 +86,6 @@ public class GameService {
             game.getGrid().setWinnerValue(winnerValue);
             nextGridInfos.setFinished(true);
             nextGridInfos.setPlayer(game.getCurrentPlayer());
-            return nextGridInfos;
         }
 
         if (game.getIp() != null && isFrontend) {
