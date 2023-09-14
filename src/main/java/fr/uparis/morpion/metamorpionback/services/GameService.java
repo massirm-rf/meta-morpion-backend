@@ -7,6 +7,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
+
+import static fr.uparis.morpion.metamorpionback.utils.Constants.HEIGHT;
+import static fr.uparis.morpion.metamorpionback.utils.Constants.WIDTH;
 
 @Service
 @Getter
@@ -28,7 +32,7 @@ public class GameService {
 
         if (ip != null) {
             game.setIp(ip);
-            if(isFrontend) {
+            if (isFrontend) {
                 Map<String, Object> params = new HashMap<>();
                 params.put("ip", ip);
                 params.put("starter", starter);
@@ -107,5 +111,32 @@ public class GameService {
         return Boolean.TRUE;
     }
 
+    public GridDTO playWithAILevel1(NextGridDTO nextGrid, BoxEnum playerValue) {
+        Integer row = nextGrid.getNextRow();
+        Integer column = nextGrid.getNextColumn();
+        boolean played = false;
+        Random random = new Random();
+        GridDTO gridDto = null;
+        // if we can play everywhere
+        if (row == null && column == null) {
+            for (int i = 0; i < HEIGHT; i++) {
+                for (int j = 0; j < WIDTH; j++) {
+                    if (!game.getGrid().getChildGrids()[i][j].isFull() && game.getGrid().getChildGrids()[i][j].getWinner() != BoxEnum.none) {
+                        row = i;
+                        column = j;
+                    }
+                }
+            }
+        }
+        while (!played) {
+            int childRow = random.nextInt(3);
+            int childColumn = random.nextInt(3);
+            if (game.getGrid().getChildGrids()[row][column].getBoxes()[childRow][childColumn] == BoxEnum.none) {
+                gridDto = new GridDTO(row, column, childRow, childColumn, playerValue);
+                played = true;
+            }
+        }
+        return gridDto;
+    }
 
 }
