@@ -100,6 +100,7 @@ public class GameService {
         BoxEnum winnerValue = game.getGrid().calculateWinner();
         if (winnerValue != BoxEnum.none) {
             game.getGrid().setWinnerValue(winnerValue);
+            game.setFinished(true);
             nextGridInfos.setFinished(true);
             nextGridInfos.setPlayer(game.getCurrentPlayer());
         }
