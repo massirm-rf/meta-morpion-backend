@@ -33,7 +33,7 @@ public class MorpionController {
     @ApiResponse(responseCode = "201", description = "Partie créée avec succès", content = @Content(schema = @Schema(implementation = Game.class)))
     @ApiResponse(responseCode = "400", description = "Requête invalide", content = @Content(mediaType = "text/plain"))
     @ApiResponse(responseCode = "500", description = "Erreur interne du serveur", content = @Content(mediaType = "text/plain"))
-    public ResponseEntity<Game> initGame(HttpServletRequest httpServletRequest, @Parameter(description = "Adresse ip du joueeur suivi du numero de port (ip:port)", example = "122.122.001.002:4242") @RequestParam(required = false) String ip, @Parameter(description = "Indiquer si le joueur veut jouer en premier", required = true, example = "true") @RequestParam boolean starter, @io.swagger.v3.oas.annotations.parameters.RequestBody(
+    public ResponseEntity<Game> initGame(@RequestParam(required = false, defaultValue = "false") boolean vsAI, HttpServletRequest httpServletRequest, @Parameter(description = "Adresse ip du joueeur suivi du numero de port (ip:port)", example = "122.122.001.002:4242") @RequestParam(required = false) String ip, @Parameter(description = "Indiquer si le joueur veut jouer en premier", required = true, example = "true") @RequestParam boolean starter, @io.swagger.v3.oas.annotations.parameters.RequestBody(
             description = "Données du joueur démarreur de partie",
             required = true,
             content = @Content(schema = @Schema(implementation = Player.class)))
@@ -42,7 +42,7 @@ public class MorpionController {
 
         boolean isFrontend = httpServletRequest.getHeader("host") != null && httpServletRequest.getHeader("host").startsWith("localhost");
 
-        Game firstGridGame = gameService.initGame(ip,starterPlayer, starter, isFrontend);
+        Game firstGridGame = gameService.initGame(vsAI, ip,starterPlayer, starter, isFrontend);
         template.convertAndSend("/init-game", firstGridGame);
         return ResponseEntity.ok(firstGridGame);
     }

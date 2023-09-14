@@ -29,9 +29,10 @@ public class NetworkImplE implements Network {
 
         String url = (String) params.get("ip");
         boolean starter = (boolean) params.get("starter");
+        boolean vsAI = (boolean) params.get("vsAI");
         Player starterPlayer = (Player) body;
 
-        url = String.format("%s/morpion/init?starter=%s&starterPlayer=%s&ip=%s", url, starter, starterPlayer, myIp);
+        url = String.format("%s/morpion/init?vsAI=%s&starter=%s&starterPlayer=%s&ip=%s", url, vsAI, starter, starterPlayer, myIp);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setOrigin(myIp);

@@ -10,4 +10,5 @@ import lombok.*;
 public class Player {
     private String playerName;
     private BoxEnum gameValue;
+    private boolean ai;
 }

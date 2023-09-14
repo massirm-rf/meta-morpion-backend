@@ -22,11 +22,11 @@ public class GameService {
         this.network = network;
     }
 
-    public Game initGame(String ip, Player starterPlayer, boolean starter, boolean isFrontend) {
+    public Game initGame(boolean vsAI, String ip, Player starterPlayer, boolean starter, boolean isFrontend) {
 
         BoxEnum player2GameValue = (starterPlayer.getGameValue().compareTo(BoxEnum.x_value) == 0) ? BoxEnum.o_value :
                 BoxEnum.x_value;
-        Player player2 = Player.builder().playerName("player2").gameValue(player2GameValue).build();
+        Player player2 = Player.builder().playerName("player2").gameValue(player2GameValue).ai(vsAI).build();
         this.game = Game.builder().player1(starterPlayer).player2(player2).grid(new Grid()).build();
         game.setCurrentPlayer((starter) ? starterPlayer : player2);
 
@@ -36,6 +36,7 @@ public class GameService {
                 Map<String, Object> params = new HashMap<>();
                 params.put("ip", ip);
                 params.put("starter", starter);
+                params.put("vsAI", vsAI);
                 network.initGame(params, starterPlayer);
             }
         }
@@ -90,6 +91,11 @@ public class GameService {
             game.getGrid().setWinnerValue(winnerValue);
             nextGridInfos.setFinished(true);
             nextGridInfos.setPlayer(game.getCurrentPlayer());
+        }
+
+        if( nextPlayer.isAi() && ( game.getIp() == null ||  !isFrontend) ) {
+            gridInfos = playWithAILevel1(nextGridInfos, nextPlayer.getGameValue());
+            fillGrid(gridInfos, true);
         }
 
         if (game.getIp() != null && isFrontend) {
