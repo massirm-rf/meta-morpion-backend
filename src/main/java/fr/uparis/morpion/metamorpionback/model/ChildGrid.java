@@ -68,10 +68,10 @@ public class ChildGrid {
         return firstLineBox;
     }
 
-    private BoxEnum checkColumn(int lineNumber) {
-        BoxEnum firstColumnBox = boxes[0][lineNumber];
+    private BoxEnum checkColumn(int columnNumber) {
+        BoxEnum firstColumnBox = boxes[0][columnNumber];
         for (int i = 1; i < HEIGHT; i++) {
-            if (!boxes[i][lineNumber].equals(firstColumnBox)) return BoxEnum.none;
+            if (!boxes[i][columnNumber].equals(firstColumnBox)) return BoxEnum.none;
         }
         return firstColumnBox;
     }
@@ -82,5 +82,49 @@ public class ChildGrid {
             return centralBox;
         }
         return BoxEnum.none;
+    }
+
+    public boolean getPossibleWinner(BoxEnum value) {
+        boolean possibleWinner;
+        for (int i = 0; i < HEIGHT; i++) {
+            possibleWinner = checkPossibleLine(i, value);
+            if (possibleWinner) {
+                return true;
+            }
+            possibleWinner = checkPossibleColumn(i, value);
+            if (possibleWinner) {
+                return true;
+            }
+        }
+        return checkPossibleDiagonalWinner(value);
+    }
+
+    private boolean checkPossibleDiagonalWinner(BoxEnum value) {
+        return (boxes[0][0] == value && value == boxes[1][1] && boxes[2][2] == BoxEnum.none) ||
+                (boxes[0][0] == value && value == boxes[2][2] && boxes[1][1] == BoxEnum.none) ||
+                (boxes[2][2] == value && value == boxes[1][1] && boxes[0][0] == BoxEnum.none) ||
+                (boxes[0][2] == value && value == boxes[2][0] && boxes[1][1] == BoxEnum.none) ||
+                (boxes[0][2] == value && value == boxes[1][1] && boxes[2][0] == BoxEnum.none) ||
+                (boxes[1][1] == value && value == boxes[2][0] && boxes[0][2] == BoxEnum.none);
+    }
+
+    private boolean checkPossibleColumn(int columnNumber, BoxEnum value) {
+        int nbDiff = 0;
+        for (int i = 0; i < WIDTH; i++) {
+            if (boxes[i][columnNumber] != value && boxes[i][columnNumber] == BoxEnum.none) {
+                nbDiff++;
+            }
+        }
+        return nbDiff == 1;
+    }
+
+    private boolean checkPossibleLine(int lineNumber, BoxEnum value) {
+        int nbDiff = 0;
+        for (int i = 0; i < WIDTH; i++) {
+            if (boxes[lineNumber][i] != value && boxes[lineNumber][i] == BoxEnum.none) {
+                nbDiff++;
+            }
+        }
+        return nbDiff == 1;
     }
 }
