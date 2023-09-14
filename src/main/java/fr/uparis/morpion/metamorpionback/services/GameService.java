@@ -44,6 +44,14 @@ public class GameService {
             }
         }
 
+        template.convertAndSend("/init-game", game);
+
+        if(isFrontend && game.getCurrentPlayer().isAi()) {
+            fillGrid(playWithAILevel1(NextGridDTO.builder().player(game.getCurrentPlayer()).build(), game.getCurrentPlayer().getGameValue()), true);
+        }
+
+        game.setEmpty(false);
+
         return game;
     }
 
@@ -96,8 +104,9 @@ public class GameService {
             nextGridInfos.setPlayer(game.getCurrentPlayer());
         }
 
-        if( nextPlayer.isAi() && ( game.getIp() == null ||  !isFrontend) ) {
-            template.convertAndSend("/play", nextGridInfos);
+        template.convertAndSend("/play", nextGridInfos);
+
+        if( nextPlayer.isAi() && ( game.getIp() == null ||  !isFrontend) && !game.isEmpty()) {
             gridInfos = playWithAILevel1(nextGridInfos, nextPlayer.getGameValue());
             return fillGrid(gridInfos, true);
         }
@@ -145,6 +154,12 @@ public class GameService {
                 gridDto = new GridDTO(row, column, childRow, childColumn, playerValue);
                 played = true;
             }
+        }
+
+        try {
+            //Thread.sleep(3000);
+        } catch (Exception exception) {
+
         }
         return gridDto;
     }

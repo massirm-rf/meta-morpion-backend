@@ -15,7 +15,7 @@ public class Game {
     private Grid grid;
 
     private String ip;
-
+    private boolean empty = true;
 
 
     public boolean isReady() {

@@ -43,7 +43,6 @@ public class MorpionController {
         boolean isFrontend = httpServletRequest.getHeader("host") != null && httpServletRequest.getHeader("host").startsWith("localhost");
 
         Game firstGridGame = gameService.initGame(vsAI, ip,starterPlayer, starter, isFrontend);
-        template.convertAndSend("/init-game", firstGridGame);
         return ResponseEntity.ok(firstGridGame);
     }
 
@@ -71,7 +70,6 @@ public class MorpionController {
         boolean isFrontend = httpServletRequest.getHeader("host") != null && httpServletRequest.getHeader("host").startsWith("localhost");
 
         NextGridDTO nextGrid = gameService.fillGrid(bodyInput, isFrontend);
-        template.convertAndSend("/play", nextGrid);
         return ResponseEntity.ok(nextGrid);
     }
 
