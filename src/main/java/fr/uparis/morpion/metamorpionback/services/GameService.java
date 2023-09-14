@@ -106,17 +106,18 @@ public class GameService {
 
         template.convertAndSend("/play", nextGridInfos);
 
-        if( nextPlayer.isAi() && ( game.getIp() == null ||  !isFrontend) && !game.isEmpty()) {
-            gridInfos = playWithAILevel1(nextGridInfos, nextPlayer.getGameValue());
-            return fillGrid(gridInfos, true);
-        }
+        if (!this.game.isFinished()) {
+            if( nextPlayer.isAi() && ( game.getIp() == null ||  !isFrontend) && !game.isEmpty()) {
+                gridInfos = playWithAILevel1(nextGridInfos, nextPlayer.getGameValue());
+                return fillGrid(gridInfos, true);
+            }
 
-        if (game.getIp() != null && isFrontend) {
-            Map<String, Object> params = new HashMap<>();
-            params.put("ip", game.getIp());
-            network.play(params, gridInfos);
+            if (game.getIp() != null && isFrontend) {
+                Map<String, Object> params = new HashMap<>();
+                params.put("ip", game.getIp());
+                network.play(params, gridInfos);
+            }
         }
-
         return nextGridInfos;
     }
 
