@@ -3,6 +3,7 @@ package fr.uparis.morpion.metamorpionback.services;
 import fr.uparis.morpion.metamorpionback.model.*;
 import fr.uparis.morpion.metamorpionback.network.Network;
 import lombok.Getter;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -16,10 +17,12 @@ import static fr.uparis.morpion.metamorpionback.utils.Constants.WIDTH;
 @Getter
 public class GameService {
     private final Network network;
+    private final SimpMessagingTemplate template;
     private Game game;
 
-    public GameService(Network network) {
+    public GameService(Network network, SimpMessagingTemplate template) {
         this.network = network;
+        this.template = template;
     }
 
     public Game initGame(boolean vsAI, String ip, Player starterPlayer, boolean starter, boolean isFrontend) {
@@ -94,8 +97,9 @@ public class GameService {
         }
 
         if( nextPlayer.isAi() && ( game.getIp() == null ||  !isFrontend) ) {
+            template.convertAndSend("/play", nextGridInfos);
             gridInfos = playWithAILevel1(nextGridInfos, nextPlayer.getGameValue());
-            fillGrid(gridInfos, true);
+            return fillGrid(gridInfos, true);
         }
 
         if (game.getIp() != null && isFrontend) {
