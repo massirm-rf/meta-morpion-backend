@@ -46,8 +46,9 @@ public class GameService {
 
         template.convertAndSend("/init-game", game);
 
-        if(isFrontend && game.getCurrentPlayer().isAi()) {
-            fillGrid(playWithAILevel1(NextGridDTO.builder().player(game.getCurrentPlayer()).build(), game.getCurrentPlayer().getGameValue()), true);
+        if (isFrontend && game.getCurrentPlayer().isAi()) {
+            fillGrid(playWithAILevel1(NextGridDTO.builder().player(game.getCurrentPlayer()).build(),
+                    game.getCurrentPlayer().getGameValue()), true);
         }
 
         game.setEmpty(false);
@@ -106,18 +107,14 @@ public class GameService {
         }
 
         template.convertAndSend("/play", nextGridInfos);
-
-        if (!this.game.isFinished()) {
-            if( nextPlayer.isAi() && ( game.getIp() == null ||  !isFrontend) && !game.isEmpty()) {
-                gridInfos = playWithAILevel1(nextGridInfos, nextPlayer.getGameValue());
-                return fillGrid(gridInfos, true);
-            }
-
-            if (game.getIp() != null && isFrontend) {
-                Map<String, Object> params = new HashMap<>();
-                params.put("ip", game.getIp());
-                network.play(params, gridInfos);
-            }
+        if (!this.game.isFinished() && nextPlayer.isAi() && (game.getIp() == null || !isFrontend) && !game.isEmpty()) {
+            gridInfos = playWithAILevel1(nextGridInfos, nextPlayer.getGameValue());
+            return fillGrid(gridInfos, true);
+        }
+        if (game.getIp() != null && isFrontend) {
+            Map<String, Object> params = new HashMap<>();
+            params.put("ip", game.getIp());
+            network.play(params, gridInfos);
         }
         return nextGridInfos;
     }
