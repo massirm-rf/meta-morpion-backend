@@ -20,7 +20,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/swns")
                 .enableSimpleBroker(
-                        "/init-game", "/play","/quit"
+                        "/init-game", "/play", "/quit"
                 );
     }
 

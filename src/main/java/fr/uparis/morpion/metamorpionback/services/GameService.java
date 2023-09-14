@@ -131,7 +131,7 @@ public class GameService {
         if (row == null && column == null) {
             for (int i = 0; i < HEIGHT; i++) {
                 for (int j = 0; j < WIDTH; j++) {
-                    if (!game.getGrid().getChildGrids()[i][j].isFull() && game.getGrid().getChildGrids()[i][j].getWinner() != BoxEnum.none) {
+                    if (!game.getGrid().getChildGrids()[i][j].isFull() && game.getGrid().getChildGrids()[i][j].getWinner() == BoxEnum.none) {
                         row = i;
                         column = j;
                     }
