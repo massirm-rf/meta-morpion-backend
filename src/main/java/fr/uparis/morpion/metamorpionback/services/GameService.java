@@ -163,42 +163,58 @@ public class GameService {
         return gridDto;
     }
 
-    private GridDTO findBestMove(int zoneRow, int zoneColumn, BoxEnum value) {
+    private GridDTO playWithAILevel2(NextGridDTO nextGrid, BoxEnum playerValue) {
+        return this.findBestMove(nextGrid.getNextRow(), nextGrid.getNextColumn(), playerValue);
+    }
+
+    private GridDTO findBestMove(Integer zoneRow, Integer zoneColumn, BoxEnum value) {
         int bestScore = Integer.MIN_VALUE;
         Integer bestChildRow = null;
         Integer bestChildColumn = null;
-        BoxEnum[][] childGrid = this.game.getGrid().getChildGrids()[zoneRow][zoneColumn].getBoxes();
 
-        for (int i = 0; i < childGrid.length; i++) {
-            for (int j = 0; j < childGrid[i].length; j++) {
-                if (childGrid[i][j] == BoxEnum.none) {
-                    childGrid[i][j] = value;
-                    int score = minimax(zoneRow, zoneColumn,0, value == BoxEnum.o_value ? BoxEnum.x_value :
-                            BoxEnum.o_value, value);
-                    childGrid[i][j] = value;
-
-                    if (score > bestScore) {
-                        bestScore = score;
-                        bestChildRow = i;
-                        bestChildColumn = j;
+        if (zoneRow == null || zoneColumn == null) {
+            ChildGrid[][] childGrids = this.game.getGrid().getChildGrids();
+            for (int i = 0; i < childGrids.length; i++) {
+                for (int j = 0; j < childGrids[i].length; j++) {
+                    if (childGrids[i][j].getWinner() == BoxEnum.none && !childGrids[i][j].isFull() ) {
+                        int score = this.evaluate(value, i, j, value).getScore();
+                        if (score > bestScore) {
+                            bestScore = score;
+                            zoneRow = i;
+                            zoneColumn = j;
+                        }
                     }
                 }
             }
         }
-
+        bestScore = Integer.MIN_VALUE;
+        if (zoneRow != null && zoneColumn != null) {
+            BoxEnum[][] childGrid = this.game.getGrid().getChildGrids()[zoneRow][zoneColumn].getBoxes();
+            ScoreEval scoreEval = this.evaluate(value, zoneRow, zoneColumn, value);
+            bestScore = scoreEval.getScore();
+            bestChildRow = scoreEval.getChildRow();
+            bestChildColumn = scoreEval.getChildColumn();
+            for (int i = 0; i < childGrid.length; i++) {
+                for (int j = 0; j < childGrid[i].length; j++) {
+                    if (childGrid[i][j] == BoxEnum.none) {
+                        childGrid[i][j] = value;
+                        int score = minimax(i, j, 0, value == BoxEnum.x_value ? BoxEnum.o_value : BoxEnum.x_value, value);
+                        childGrid[i][j] = BoxEnum.none;
+                        if (score > bestScore) {
+                            bestScore = score;
+                            bestChildRow = i;
+                            bestChildColumn = j;
+                        }
+                    }
+                }
+            }
+        }
         return GridDTO.builder().childRow(bestChildRow).childColumn(bestChildColumn).row(zoneRow).column(zoneColumn).value(value).build();
     }
 
     private int minimax(int zoneRow, int zoneColumn, int depth, BoxEnum value, BoxEnum currentPlayerValue) {
-        // Check if the game is over or if a terminal state is reached.
-        // You'll need to define your own logic for checking the game state
-        // and evaluating it.
-
-        // For example, if 'X' wins, return 10; if 'O' wins, return -10; if it's a tie, return 0.
-
-        // If the game is over or the maximum depth is reached, return the evaluation score.
         if (this.game.getGrid().calculateWinner() != BoxEnum.none || depth >= 1) {
-            return evaluate(value, zoneRow, zoneColumn, currentPlayerValue);
+            return evaluate(value, zoneRow, zoneColumn, currentPlayerValue).getScore();
         }
 
         BoxEnum[][] childGrid = this.game.getGrid().getChildGrids()[zoneRow][zoneColumn].getBoxes();
@@ -211,8 +227,10 @@ public class GameService {
                         childGrid[i][j] = value;
                         int score = minimax(i, j, depth + 1, value == BoxEnum.o_value ? BoxEnum.x_value :
                                 BoxEnum.o_value, currentPlayerValue);
+                        int myScore = this.evaluate(value, zoneRow, zoneColumn, currentPlayerValue).getScore();
                         childGrid[i][j] = BoxEnum.none;
                         bestScore = Math.max(score, bestScore);
+                        bestScore = Math.max(myScore, bestScore);
                     }
                 }
             }
@@ -224,8 +242,10 @@ public class GameService {
                         childGrid[i][j] = value;
                         int score = minimax(i, j, depth + 1, value == BoxEnum.o_value ? BoxEnum.x_value :
                                 BoxEnum.o_value, currentPlayerValue);
+                        int myScore = this.evaluate(value, zoneRow, zoneColumn, currentPlayerValue).getScore();
                         childGrid[i][j] = BoxEnum.none;
                         bestScore = Math.min(score, bestScore);
+                        bestScore = Math.min(myScore, bestScore);
                     }
                 }
             }
@@ -233,8 +253,11 @@ public class GameService {
         return bestScore;
     }
 
-    private int evaluate(BoxEnum value, int zoneRow, int zoneColumn, BoxEnum currentPlayerValue) {
+    private ScoreEval evaluate(BoxEnum value, int zoneRow, int zoneColumn, BoxEnum currentPlayerValue) {
         BoxEnum[][] childGrid = this.game.getGrid().getChildGrids()[zoneRow][zoneColumn].getBoxes();
+        Integer childRow = null;
+        Integer childColumn = null;
+        ScoreEval bestScore = null;
         for (int i = 0; i < childGrid.length; i++) {
             for (int j = 0; j < childGrid[i].length; j++) {
                 if (childGrid[i][j] == BoxEnum.none) {
@@ -243,15 +266,17 @@ public class GameService {
                     boolean possibleNextWinner =
                             this.game.getGrid().getChildGrids()[zoneRow][zoneColumn].getPossibleWinner(value);
                     childGrid[i][j] = BoxEnum.none;
+                    childRow = i;
+                    childColumn = j;
                     if (winnerValue != BoxEnum.none) {
-                        return currentPlayerValue == value ? 20 : -10;
+                        return ScoreEval.builder().score(currentPlayerValue == value ? 20 : -10).childRow(i).childColumn(j).build();
                     }
                     if (possibleNextWinner) {
-                        return currentPlayerValue == value ? 10 : -5;
+                        bestScore = ScoreEval.builder().score(currentPlayerValue == value ? 10 : -5).childRow(i).childColumn(j).build();
                     }
                 }
             }
         }
-        return 0;
+        return bestScore != null ? bestScore : ScoreEval.builder().score(0).childRow(childRow).childColumn(childColumn).build();
     }
 }
