@@ -23,6 +23,8 @@ public class NetworkImplC implements Network {
     private String roomCode;
     @Value("${player-uuid}")
     private String playerUUIO;
+    @Value("${my-ip}")
+    private String myIp;
 
     @Override
     public Object initGame(Map<String, Object> params, Object body) {
@@ -32,10 +34,10 @@ public class NetworkImplC implements Network {
         String uuid = UUID.randomUUID().toString();
         this.playerUUIO = uuid;
         boolean firstToPlay = (Boolean) params.get("starter");
-        url = String.format("%s/game/create?gameType=%s&playerUUID%s&firstToPlay=%s", url, gameType, uuid, firstToPlay);
+        url = String.format("%s/game/create?gameType=%s&playerUUID=%s&firstToPlay=%s", url, gameType, uuid, firstToPlay);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setOrigin((String) params.get("ip"));
+        headers.setOrigin(myIp);
         HttpEntity<String> request = new HttpEntity<>(null, headers);
         GameC result = template.postForObject(url, request, GameC.class);
 
