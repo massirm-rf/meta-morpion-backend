@@ -164,7 +164,13 @@ public class GameService {
     }
 
     private GridDTO playWithAILevel2(NextGridDTO nextGrid, BoxEnum playerValue) {
-        return this.findBestMove(nextGrid.getNextRow(), nextGrid.getNextColumn(), playerValue);
+        GridDTO gridDTO = this.findBestMove(nextGrid.getNextRow(), nextGrid.getNextColumn(), playerValue);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return gridDTO;
     }
 
 
