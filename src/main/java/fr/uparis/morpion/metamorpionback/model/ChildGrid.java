@@ -45,6 +45,17 @@ public class ChildGrid {
         return true;
     }
 
+    public boolean isEmpty() {
+        for (BoxEnum[] boxLine : boxes) {
+            for (BoxEnum box : boxLine) {
+                if (box != BoxEnum.none) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public BoxEnum getWinner() {
         BoxEnum childGridWinner;
         for (int i = 0; i < HEIGHT; i++) {

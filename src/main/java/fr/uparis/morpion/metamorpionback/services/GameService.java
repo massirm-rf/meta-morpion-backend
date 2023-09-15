@@ -167,6 +167,7 @@ public class GameService {
         return this.findBestMove(nextGrid.getNextRow(), nextGrid.getNextColumn(), playerValue);
     }
 
+
     private GridDTO findBestMove(Integer zoneRow, Integer zoneColumn, BoxEnum value) {
         int bestScore = Integer.MIN_VALUE;
         Integer bestChildRow = null;
@@ -176,7 +177,7 @@ public class GameService {
             ChildGrid[][] childGrids = this.game.getGrid().getChildGrids();
             for (int i = 0; i < childGrids.length; i++) {
                 for (int j = 0; j < childGrids[i].length; j++) {
-                    if (childGrids[i][j].getWinner() == BoxEnum.none && !childGrids[i][j].isFull() ) {
+                    if (childGrids[i][j].getWinner() == BoxEnum.none && !childGrids[i][j].isFull()) {
                         int score = this.evaluate(value, i, j, value).getScore();
                         if (score > bestScore) {
                             bestScore = score;
@@ -210,6 +211,58 @@ public class GameService {
             }
         }
         return GridDTO.builder().childRow(bestChildRow).childColumn(bestChildColumn).row(zoneRow).column(zoneColumn).value(value).build();
+    }
+
+
+    public GridDTO playWithAILevel3(NextGridDTO nextGrid, BoxEnum playerValue) {
+        GridDTO gridDto = null;
+        Integer row = nextGrid.getNextRow();
+        Integer column = nextGrid.getNextColumn();
+        BoxEnum opponent = BoxEnum.x_value == playerValue ? BoxEnum.o_value : BoxEnum.x_value;
+
+        if (row == null || column == null) {
+            gridDto = getChildGridTowin(playerValue);
+            if (gridDto != null)
+                return gridDto;
+            gridDto = getChildGridTowin(opponent);
+            if (gridDto != null)
+                return new GridDTO(gridDto.getRow(), gridDto.getColumn(), gridDto.getChildRow(), gridDto.getChildColumn(), playerValue);
+
+            gridDto = getPossibleChildGridTowin(playerValue, false);
+            if (gridDto != null)
+                return gridDto;
+            gridDto = getPossibleChildGridTowin(opponent, true);
+            if (gridDto != null)
+                return new GridDTO(gridDto.getRow(), gridDto.getColumn(), gridDto.getChildRow(), gridDto.getChildColumn(), playerValue);
+        }
+
+        // si mon coup est gagnant
+        gridDto = getCoordinatesToWin(playerValue, row, column);
+        if (gridDto != null) return gridDto;
+
+        //si l'adversaire peut gagner dans cette grille
+        gridDto = getCoordinatesToWin(opponent, row, column);
+        if (gridDto != null)
+            return new GridDTO(gridDto.getRow(), gridDto.getColumn(), gridDto.getChildRow(), gridDto.getChildColumn(), playerValue);
+
+
+        //coup merdique
+        gridDto = playForCleanChildGrid(row, column);
+        if (gridDto != null) {
+            gridDto = new GridDTO(row, column, gridDto.getChildRow(), gridDto.getChildColumn(), playerValue);
+            return gridDto;
+        }
+
+        // jouer avec la deuxième valeur
+        gridDto = getCoordinatesToPossibleWin(playerValue, row, column, false);
+        if (gridDto != null)
+            return gridDto;
+
+        gridDto = getCoordinatesToPossibleWin(opponent, row, column, true);
+        if (gridDto != null)
+            return new GridDTO(gridDto.getRow(), gridDto.getColumn(), gridDto.getChildRow(), gridDto.getChildColumn(), playerValue);
+
+        return playWithAILevel1(nextGrid, playerValue);
     }
 
     private int minimax(int zoneRow, int zoneColumn, int depth, BoxEnum value, BoxEnum currentPlayerValue) {
@@ -279,4 +332,86 @@ public class GameService {
         }
         return bestScore != null ? bestScore : ScoreEval.builder().score(0).childRow(childRow).childColumn(childColumn).build();
     }
+
+    private GridDTO getCoordinatesToWin(BoxEnum possibleWinnerValue, int zoneRow, int zoneColumn) {
+        BoxEnum[][] childGrid = this.game.getGrid().getChildGrids()[zoneRow][zoneColumn].getBoxes();
+        for (int i = 0; i < childGrid.length; i++) {
+            for (int j = 0; j < childGrid[i].length; j++) {
+                if (childGrid[i][j] == BoxEnum.none) {
+                    childGrid[i][j] = possibleWinnerValue;
+                    BoxEnum winnerValue = this.game.getGrid().getChildGrids()[zoneRow][zoneColumn].getWinner();
+                    childGrid[i][j] = BoxEnum.none;
+                    if (winnerValue == possibleWinnerValue) {
+                        return new GridDTO(zoneRow, zoneColumn, i, j, possibleWinnerValue);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private GridDTO getCoordinatesToPossibleWin(BoxEnum possibleWinnerValue, int zoneRow, int zoneColumn, boolean allowRandomRound) {
+        BoxEnum[][] childGrid = this.game.getGrid().getChildGrids()[zoneRow][zoneColumn].getBoxes();
+        for (int i = 0; i < childGrid.length; i++) {
+            for (int j = 0; j < childGrid[i].length; j++) {
+                if (childGrid[i][j] == BoxEnum.none) {
+                    childGrid[i][j] = possibleWinnerValue;
+                    boolean possibleNextWinner =
+                            this.game.getGrid().getChildGrids()[zoneRow][zoneColumn].getPossibleWinner(possibleWinnerValue);
+                    childGrid[i][j] = BoxEnum.none;
+                    if (possibleNextWinner) {
+                        if (allowRandomRound) {
+                            return new GridDTO(zoneRow, zoneColumn, i, j, possibleWinnerValue);
+                        }
+                        if (game.getGrid().getChildGrids()[i][j].isFull() || game.getGrid().getChildGrids()[i][j].getWinner() != BoxEnum.none) {
+                            return new GridDTO(zoneRow, zoneColumn, i, j, possibleWinnerValue);
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+
+    private GridDTO getPossibleChildGridTowin(BoxEnum playerValue, boolean allowRandom) {
+        ChildGrid[][] childGrids = this.game.getGrid().getChildGrids();
+        for (int i = 0; i < childGrids.length; i++) {
+            for (int j = 0; j < childGrids[i].length; j++) {
+                if (childGrids[i][j].getWinner() == BoxEnum.none && !childGrids[i][j].isFull()) {
+                    GridDTO gridDTO = getCoordinatesToPossibleWin(playerValue, i, j, allowRandom);
+                    if (gridDTO != null)
+                        return gridDTO;
+                }
+            }
+        }
+        return null;
+    }
+
+    private GridDTO getChildGridTowin(BoxEnum playerValue) {
+        ChildGrid[][] childGrids = this.game.getGrid().getChildGrids();
+        for (int i = 0; i < childGrids.length; i++) {
+            for (int j = 0; j < childGrids[i].length; j++) {
+                if (childGrids[i][j].getWinner() == BoxEnum.none && !childGrids[i][j].isFull()) {
+                    GridDTO gridDTO = getCoordinatesToWin(playerValue, i, j);
+                    if (gridDTO != null)
+                        return gridDTO;
+                }
+            }
+        }
+        return null;
+    }
+
+    private GridDTO playForCleanChildGrid(int zoneRow, int zoneColumn) {
+        ChildGrid childGrid = game.getGrid().getChildGrids()[zoneRow][zoneColumn];
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (childGrid.getBoxes()[i][j] == BoxEnum.none && game.getGrid().getChildGrids()[i][j].isEmpty())
+                    return new GridDTO(i, j, i, j, null);
+            }
+        }
+        return null;
+    }
+
+
 }
